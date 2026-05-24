@@ -12,7 +12,7 @@
 
 import { WebpackConfigBuilder } from '@tomaschochola/tooling-webpack';
 
-// eslint-disable-next-line no-restricted-exports
+ 
 export default function (env, argv) {
   let tooling = new WebpackConfigBuilder({
     env,
@@ -21,7 +21,7 @@ export default function (env, argv) {
 
   tooling = tooling
     .setEntries({
-      index: ['./src/index.ts'],
+      index: ['./smoke/index.ts'],
     })
     .addBabelLoader()
     .addStyleLoaders()
@@ -36,32 +36,22 @@ export default function (env, argv) {
       APP_ENV: tooling.appEnv,
       APP_NAME: tooling.appName,
       APP_VERSION: tooling.appVersion,
-      OTLP_API_KEY: env.OTLP_API_KEY ?? argv.otlpApiKey ?? process.env.OTLP_API_KEY ?? '',
     })
     .addDefinePlugin()
     .addHtmlPlugin({
-      template: './src/index.html',
+      template: './smoke/index.html',
       filename: 'index.html',
     })
-    .addPublicCopyPlugin()
-    .addCopyFrom('./generated')
     .addTerserMinimizer()
     .addCssMinimizer()
     .addHtmlMinimizer()
     .addJsonMinimizer()
-    .addImageMinimizer()
-    .addIgnoredWarnings([
-      {
-        message: /Critical dependency: the request of a dependency is an expression/,
-        module: /node_modules[/\\]@protobufjs[/\\]inquire[/\\]/,
-      },
-    ]);
+    .addImageMinimizer();
 
   if (tooling.isProductionMode) {
     tooling = tooling
       .addGzipCompressionPlugin()
-      .addBrotliCompressionPlugin()
-      .addWorkboxServiceWorkerPlugin();
+      .addBrotliCompressionPlugin();
   }
 
   return tooling.toConfig();

@@ -16,7 +16,6 @@
 
 # compiled files
 /dist
-/generated
 /tmp
 
 # playwright

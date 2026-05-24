@@ -484,7 +484,7 @@ tch-ui-button
 Class:
 
 ```ts
-TchUiButtonElement
+TchUiButtonElement;
 ```
 
 Rules:
@@ -496,14 +496,11 @@ Rules:
 ### 9.3 Constants and functions
 
 ```ts
-export const TCH_UI_BUTTON_TAG_NAME = "tch-ui-button" as const;
+export const TCH_UI_BUTTON_TAG_NAME = 'tch-ui-button' as const;
 
-export const TCH_UI_BUTTON_ACTIVATE_EVENT_NAME =
-  "tch-ui-button-activate" as const;
+export const TCH_UI_BUTTON_ACTIVATE_EVENT_NAME = 'tch-ui-button-activate' as const;
 
-export function defineTchUiButton(
-  registry: CustomElementRegistry
-): void;
+export function defineTchUiButton(registry: CustomElementRegistry): void;
 ```
 
 Rules:
@@ -554,9 +551,7 @@ Registration is explicit.
 Canonical function:
 
 ```ts
-export function defineTchUiButton(
-  registry: CustomElementRegistry
-): void {
+export function defineTchUiButton(registry: CustomElementRegistry): void {
   registry.define(TCH_UI_BUTTON_TAG_NAME, TchUiButtonElement);
 }
 ```
@@ -576,7 +571,7 @@ Rules:
 Forbidden inside component source:
 
 ```ts
-customElements.define("tch-ui-button", TchUiButtonElement);
+customElements.define('tch-ui-button', TchUiButtonElement);
 ```
 
 ## 11. Pre-upgrade property policy
@@ -611,27 +606,21 @@ Canonical rules:
 Canonical shape:
 
 ```ts
-this.#root = this.shadowRoot ?? this.attachShadow({
-  mode: "open"
-});
+this.#root =
+  this.shadowRoot ??
+  this.attachShadow({
+    mode: 'open',
+  });
 
-this.#root.adoptedStyleSheets = [
-  stylesheetForDocument(this.ownerDocument)
-];
+this.#root.adoptedStyleSheets = [stylesheetForDocument(this.ownerDocument)];
 
 if (this.#root.childNodes.length === 0) {
-  this.#root.append(
-    this.ownerDocument.importNode(template.content, true)
-  );
+  this.#root.append(this.ownerDocument.importNode(template.content, true));
 }
 
 const view = requireDocumentView(this.ownerDocument);
 
-this.#button = requireShadowRef(
-  this.#root,
-  "button",
-  view.HTMLButtonElement
-);
+this.#button = requireShadowRef(this.#root, 'button', view.HTMLButtonElement);
 ```
 
 DSD compatibility is only a source-shape rule. It does not create an SSR or hydration requirement.
@@ -668,7 +657,7 @@ export function requireDocumentView(document: Document): Window {
   const view = document.defaultView;
 
   if (view === null) {
-    throw new TypeError("Document has no defaultView.");
+    throw new TypeError('Document has no defaultView.');
   }
 
   return view;
@@ -682,7 +671,7 @@ Component SCSS is authored as SCSS and imported as CSS text.
 Canonical import:
 
 ```ts
-import cssSource from "./tch-ui-button.scss?source";
+import cssSource from './tch-ui-button.scss?source';
 ```
 
 Rules:
@@ -700,9 +689,7 @@ Rules:
 Canonical stylesheet primitive:
 
 ```ts
-export function createComponentStylesheet(
-  cssSource: string
-): (document: Document) => CSSStyleSheet {
+export function createComponentStylesheet(cssSource: string): (document: Document) => CSSStyleSheet {
   const stylesheetByDocument = new WeakMap<Document, CSSStyleSheet>();
 
   return (document: Document): CSSStyleSheet => {
@@ -743,7 +730,7 @@ Templates are static authored HTML.
 Canonical source:
 
 ```ts
-const template = document.createElement("template");
+const template = document.createElement('template');
 
 template.innerHTML = `
   <button data-ref="button" part="button" type="button">
@@ -788,17 +775,11 @@ type ElementConstructor<T extends Element> = {
   new (...args: never[]): T;
 };
 
-export function requireShadowRef<T extends Element>(
-  root: ShadowRoot,
-  ref: string,
-  constructor: ElementConstructor<T>
-): T {
+export function requireShadowRef<T extends Element>(root: ShadowRoot, ref: string, constructor: ElementConstructor<T>): T {
   const elements = root.querySelectorAll(`[data-ref="${ref}"]`);
 
   if (elements.length !== 1) {
-    throw new TypeError(
-      `Expected exactly one shadow ref "${ref}", found ${elements.length}.`
-    );
+    throw new TypeError(`Expected exactly one shadow ref "${ref}", found ${elements.length}.`);
   }
 
   const element = elements.item(0);
@@ -816,11 +797,7 @@ Canonical use:
 ```ts
 const view = requireDocumentView(this.ownerDocument);
 
-this.#button = requireShadowRef(
-  this.#root,
-  "button",
-  view.HTMLButtonElement
-);
+this.#button = requireShadowRef(this.#root, 'button', view.HTMLButtonElement);
 ```
 
 Rules:
@@ -843,25 +820,20 @@ Rules:
 This skeleton is authoritative in shape. Component-specific behavior may differ.
 
 ```ts
-import {
-  createComponentStylesheet,
-  requireDocumentView,
-  requireShadowRef
-} from "../internal/dom-primitives";
-import cssSource from "./tch-ui-button.scss?source";
+import { createComponentStylesheet, requireDocumentView, requireShadowRef } from '../internal/dom-primitives';
+import cssSource from './tch-ui-button.scss?source';
 
-export const TCH_UI_BUTTON_TAG_NAME = "tch-ui-button" as const;
+export const TCH_UI_BUTTON_TAG_NAME = 'tch-ui-button' as const;
 
-export const TCH_UI_BUTTON_ACTIVATE_EVENT_NAME =
-  "tch-ui-button-activate" as const;
+export const TCH_UI_BUTTON_ACTIVATE_EVENT_NAME = 'tch-ui-button-activate' as const;
 
 const ATTRIBUTE = {
-  disabled: "disabled"
+  disabled: 'disabled',
 } as const satisfies Record<string, string>;
 
 const stylesheetForDocument = createComponentStylesheet(cssSource);
 
-const template = document.createElement("template");
+const template = document.createElement('template');
 
 template.innerHTML = `
   <button data-ref="button" part="button" type="button">
@@ -872,16 +844,13 @@ template.innerHTML = `
 `;
 
 export type TchUiButtonActivateDetail = Readonly<{
-  trigger: "click";
+  trigger: 'click';
 }>;
 
-export type TchUiButtonActivateEvent =
-  CustomEvent<TchUiButtonActivateDetail>;
+export type TchUiButtonActivateEvent = CustomEvent<TchUiButtonActivateDetail>;
 
 export class TchUiButtonElement extends HTMLElement {
-  static readonly observedAttributes = [
-    ATTRIBUTE.disabled
-  ] as const;
+  static readonly observedAttributes = [ATTRIBUTE.disabled] as const;
 
   readonly #root: ShadowRoot;
   readonly #button: HTMLButtonElement;
@@ -895,46 +864,37 @@ export class TchUiButtonElement extends HTMLElement {
     }
 
     this.dispatchEvent(
-      new CustomEvent<TchUiButtonActivateDetail>(
-        TCH_UI_BUTTON_ACTIVATE_EVENT_NAME,
-        {
-          bubbles: true,
-          composed: true,
-          detail: {
-            trigger: "click"
-          }
-        }
-      )
+      new CustomEvent<TchUiButtonActivateDetail>(TCH_UI_BUTTON_ACTIVATE_EVENT_NAME, {
+        bubbles: true,
+        composed: true,
+        detail: {
+          trigger: 'click',
+        },
+      }),
     );
   };
 
   constructor() {
     super();
 
-    this.#root = this.shadowRoot ?? this.attachShadow({
-      mode: "open",
-      delegatesFocus: true
-    });
+    this.#root =
+      this.shadowRoot ??
+      this.attachShadow({
+        mode: 'open',
+        delegatesFocus: true,
+      });
 
-    this.#root.adoptedStyleSheets = [
-      stylesheetForDocument(this.ownerDocument)
-    ];
+    this.#root.adoptedStyleSheets = [stylesheetForDocument(this.ownerDocument)];
 
     if (this.#root.childNodes.length === 0) {
-      this.#root.append(
-        this.ownerDocument.importNode(template.content, true)
-      );
+      this.#root.append(this.ownerDocument.importNode(template.content, true));
     }
 
     const view = requireDocumentView(this.ownerDocument);
 
-    this.#button = requireShadowRef(
-      this.#root,
-      "button",
-      view.HTMLButtonElement
-    );
+    this.#button = requireShadowRef(this.#root, 'button', view.HTMLButtonElement);
 
-    this.#button.addEventListener("click", this.#onButtonClick);
+    this.#button.addEventListener('click', this.#onButtonClick);
   }
 
   get disabled(): boolean {
@@ -946,16 +906,10 @@ export class TchUiButtonElement extends HTMLElement {
   }
 
   adoptedCallback(): void {
-    this.#root.adoptedStyleSheets = [
-      stylesheetForDocument(this.ownerDocument)
-    ];
+    this.#root.adoptedStyleSheets = [stylesheetForDocument(this.ownerDocument)];
   }
 
-  attributeChangedCallback(
-    name: string,
-    oldValue: string | null,
-    newValue: string | null
-  ): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) {
       return;
     }
@@ -987,15 +941,13 @@ export class TchUiButtonElement extends HTMLElement {
   }
 }
 
-export function defineTchUiButton(
-  registry: CustomElementRegistry
-): void {
+export function defineTchUiButton(registry: CustomElementRegistry): void {
   registry.define(TCH_UI_BUTTON_TAG_NAME, TchUiButtonElement);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "tch-ui-button": TchUiButtonElement;
+    'tch-ui-button': TchUiButtonElement;
   }
 }
 ```
@@ -1410,8 +1362,8 @@ Canonical state names are lower-kebab-case identifiers without a leading `--`.
 Examples:
 
 ```ts
-this.#internals.states.add("busy");
-this.#internals.states.delete("busy");
+this.#internals.states.add('busy');
+this.#internals.states.delete('busy');
 ```
 
 ```css
@@ -1570,24 +1522,20 @@ A component MAY export a component-specific event map type when it improves typi
 ### 26.2 Canonical event
 
 ```ts
-export const TCH_UI_MENU_SELECT_EVENT_NAME =
-  "tch-ui-menu-select" as const;
+export const TCH_UI_MENU_SELECT_EVENT_NAME = 'tch-ui-menu-select' as const;
 
 export type TchUiMenuSelectDetail = Readonly<{
   value: string;
 }>;
 
 this.dispatchEvent(
-  new CustomEvent<TchUiMenuSelectDetail>(
-    TCH_UI_MENU_SELECT_EVENT_NAME,
-    {
-      bubbles: true,
-      composed: true,
-      detail: {
-        value
-      }
-    }
-  )
+  new CustomEvent<TchUiMenuSelectDetail>(TCH_UI_MENU_SELECT_EVENT_NAME, {
+    bubbles: true,
+    composed: true,
+    detail: {
+      value,
+    },
+  }),
 );
 ```
 
@@ -1597,17 +1545,14 @@ Cancelable public before-events also bubble and compose.
 
 ```ts
 const accepted = this.dispatchEvent(
-  new CustomEvent<TchUiMenuSelectDetail>(
-    "tch-ui-menu-before-select",
-    {
-      bubbles: true,
-      composed: true,
-      cancelable: true,
-      detail: {
-        value
-      }
-    }
-  )
+  new CustomEvent<TchUiMenuSelectDetail>('tch-ui-menu-before-select', {
+    bubbles: true,
+    composed: true,
+    cancelable: true,
+    detail: {
+      value,
+    },
+  }),
 );
 
 if (!accepted) {
@@ -1678,11 +1623,11 @@ Rules:
 5. Use `setFormValue()` whenever the submitted value changes.
 6. Use `setValidity()` whenever validity changes.
 7. Implement form callbacks when relevant:
+   - `formAssociatedCallback`
+   - `formDisabledCallback`
+   - `formResetCallback`
+   - `formStateRestoreCallback`
 
-   * `formAssociatedCallback`
-   * `formDisabledCallback`
-   * `formResetCallback`
-   * `formStateRestoreCallback`
 8. Programmatic value changes do not dispatch `input` or `change`.
 9. User edits dispatch native-compatible `input` and `change` when the component behaves like a native input.
 10. Disabled state suppresses interaction and submission according to native-like semantics.
@@ -1941,14 +1886,14 @@ Rules:
 Rules:
 
 1. Use logical properties by default:
+   - `margin-inline`
+   - `padding-inline`
+   - `border-inline`
+   - `inset-inline`
+   - `inline-size`
+   - `block-size`
+   - `text-align: start | end`
 
-   * `margin-inline`
-   * `padding-inline`
-   * `border-inline`
-   * `inset-inline`
-   * `inline-size`
-   * `block-size`
-   * `text-align: start | end`
 2. Use physical `left` and `right` only when the meaning is physically directional.
 3. Do not force `direction` unless the component’s public contract requires it.
 4. Directional icons MUST have explicit RTL behavior.

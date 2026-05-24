@@ -6,7 +6,7 @@
   },
   "bugs": {
     "email": "tomaschochola@tomaschochola.cz",
-    "url": "https://github.com/tomaschochola/template-web-components-spa/issues"
+    "url": "https://github.com/tomaschochola/template-web-components-library/issues"
   },
   "contributors": [
     {
@@ -15,29 +15,8 @@
       "url": "https://github.com/tomaschochola"
     }
   ],
-  "dependencies": {
-    "@fontsource-variable/google-sans-flex": "^5.2.3",
-    "@opentelemetry/api": "^1.9.1",
-    "@opentelemetry/api-logs": "^0.216.0",
-    "@opentelemetry/auto-instrumentations-web": "^0.61.0",
-    "@opentelemetry/context-zone": "^2.7.1",
-    "@opentelemetry/core": "^2.7.1",
-    "@opentelemetry/exporter-logs-otlp-http": "^0.216.0",
-    "@opentelemetry/exporter-metrics-otlp-http": "^0.216.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.216.0",
-    "@opentelemetry/instrumentation": "^0.216.0",
-    "@opentelemetry/opentelemetry-browser-detector": "^0.216.0",
-    "@opentelemetry/resources": "^2.7.1",
-    "@opentelemetry/sdk-logs": "^0.216.0",
-    "@opentelemetry/sdk-metrics": "^2.7.1",
-    "@opentelemetry/sdk-trace-base": "^2.7.1",
-    "@opentelemetry/sdk-trace-web": "^2.7.1",
-    "@opentelemetry/semantic-conventions": "^1.40.0",
-    "web-vitals": "^5.2.0"
-  },
-  "description": "@tomaschochola/template-web-components-spa",
+  "description": "@tomaschochola/template-web-components-library",
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.59.1",
     "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#1.x",
     "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#1.x",
@@ -51,17 +30,17 @@
     "type": "github",
     "url": "https://github.com/sponsors/tomaschochola"
   },
-  "homepage": "https://github.com/tomaschochola/template-web-components-spa",
+  "homepage": "https://github.com/tomaschochola/template-web-components-library",
   "keywords": [
     "tomaschochola",
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "template-web-components-spa"
+    "template-web-components-library"
   ],
   "license": "CC-BY-ND-4.0",
-  "name": "@tomaschochola/template-web-components-spa",
-  "repository": "github:tomaschochola/template-web-components-spa",
+  "name": "@tomaschochola/template-web-components-library",
+  "repository": "github:tomaschochola/template-web-components-library",
   "sideEffects": true,
   "type": "module"
 }

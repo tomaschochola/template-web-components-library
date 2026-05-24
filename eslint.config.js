@@ -15,16 +15,15 @@ import { ESLintConfigBuilder, filePatterns } from '@tomaschochola/tooling-eslint
 const typescriptFiles = filePatterns.allTypeScriptFiles;
 const javascriptFiles = filePatterns.allJavaScriptFiles;
 
-// eslint-disable-next-line no-restricted-exports
+ 
 export default new ESLintConfigBuilder()
   .addNodeGlobalsForConfigFiles()
   .addBrowserGlobals()
   .addGlobalIgnores(filePatterns.defaultIgnorePatterns)
-  .addGlobalIgnores(['node_modules', 'dist', 'generated', 'tmp', 'test-results'])
+  .addGlobalIgnores(['node_modules', 'dist', 'tmp', 'test-results'])
   .addJavaScriptRecommendedRules()
-  .addJavaScriptPolicyRules()
   .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
   .enableTypeScriptProjectService({ files: typescriptFiles })
-  .addTypeScriptPolicyRules({ files: typescriptFiles })
+  .enableTypeScriptProject({ files: filePatterns.playwrightTypeScriptFiles, project: './tsconfig.playwright.json' })
   .disableTypeScriptTypeChecking({ files: javascriptFiles })
   .toConfig();

@@ -27,7 +27,5 @@ declare namespace NodeJS {
     // 'local' | 'playwright' | 'development' | 'sit' | 'uat' | 'production'
     readonly APP_ENV: string;
 
-    // regex: ^[a-zA-Z0-9]+$
-    readonly OTLP_API_KEY: string;
   }
 }

@@ -12,7 +12,7 @@
 
 import { defineConfig, devices } from '@playwright/test';
 
-// eslint-disable-next-line no-restricted-exports
+ 
 export default defineConfig({
   projects: [
     {

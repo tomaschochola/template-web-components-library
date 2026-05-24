@@ -9,7 +9,3 @@
  * @see {@link https://github.com/tomaschochola} GitHub Profile
  * @see {@link https://github.com/sponsors/tomaschochola} GitHub Sponsors
  */
-
-@use './css/base';
-@use './css/typography';
-@use './css/scrollbar';
