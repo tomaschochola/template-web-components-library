@@ -17,7 +17,9 @@ services:
     networks:
       - 'devcontainer'
     ports:
-      - '3000:3000'
+      - host_ip: '127.0.0.1'
+        protocol: 'tcp'
+        target: 3000
     user: 'node:node'
     volumes:
       - './:/workspaces'
