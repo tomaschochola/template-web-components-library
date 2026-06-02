@@ -88,12 +88,12 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm exec --ignore-scripts -- webpack-cli serve --mode=development --config-node-env=development --env APP_ENV=playwright',
-    url: 'http://localhost:3000/webpack-dev-server',
+    url: 'http://localhost:61201/webpack-dev-server',
     reuseExistingServer: true,
     timeout: 5 * 60 * 1000,
   },
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:61201',
     locale: 'en',
     screenshot: 'only-on-failure',
   },

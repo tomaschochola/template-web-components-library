@@ -110,9 +110,16 @@ postcreate: install
 start serve server dev: ./node_modules ./package.json ./package-lock.json
 	npm exec --ignore-scripts -- webpack-cli serve --mode=$${NODE_ENV:-development} --config-node-env=$${NODE_ENV:-development} --env APP_ENV=$${APP_ENV:-local}
 
-.PHONY: port
-port:
-	@set -o pipefail; project="$$(docker ps --filter 'label=devcontainer.local_folder=$(CURDIR)' --filter 'label=devcontainer.config_file=$(CURDIR)/.devcontainer/devcontainer.json' --format '{{.Label "com.docker.compose.project"}}' | head -n1)"; docker ps -q --filter "label=com.docker.compose.project=$$project" --filter 'label=com.docker.compose.service=devcontainer' | head -n1 | xargs -r -I{} docker port {} 3000/tcp | awk -F: 'NR==1 { print "http://127.0.0.1:" $$NF; ok=1 } END { exit !ok }'
+.PHONY: port ports
+port ports:
+	@printf '\033[1m%-80s\033[0m\n' 'template-web-components-library ports'
+	@printf '%-80s\n' '--------------------------------------------------------------------------------'
+	@printf '\033[1m%-12s %-21s %-12s %-20s\033[0m\n' 'Kind' 'Host' 'Container' 'Service'
+	@printf '%-12s %-21s %-12s %-20s\n' 'reserved' '-' '61200' '-'
+	@printf '%-12s %-21s %-12s %-20s\n' 'webpack' '127.0.0.1:61201' '61201' 'devcontainer'
+	@printf '%-80s\n' '--------------------------------------------------------------------------------'
+	@printf '\n\033[1mLinks\033[0m\n'
+	@printf '%s\n' 'Webpack smoke server: http://127.0.0.1:61201/'
 
 .PHONY: devcontainer
 devcontainer: precreate

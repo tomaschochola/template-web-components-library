@@ -23,6 +23,7 @@ export default function (env, argv) {
     .setEntries({
       index: ['./smoke/index.ts'],
     })
+    .setDevServerPort(61201)
     .addBabelLoader()
     .addStyleLoaders()
     .addHtmlLoader()
