@@ -14,8 +14,9 @@
 /.env
 /.secrets
 
-# compiled files
+# generated artifacts
 /dist
+/release
 /tmp
 
 # playwright
