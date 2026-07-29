@@ -20,6 +20,7 @@
     "@playwright/test": "^1.62.0",
     "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#1.x",
     "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#1.x",
+    "@tomaschochola/tooling-playwright": "github:tomaschochola/tooling-playwright#1.x",
     "@tomaschochola/tooling-postcss": "github:tomaschochola/tooling-postcss#1.x",
     "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#1.x",
     "@tomaschochola/tooling-stylelint": "github:tomaschochola/tooling-stylelint#1.x",
