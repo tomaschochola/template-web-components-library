@@ -15,7 +15,6 @@ import { ESLintConfigBuilder, filePatterns } from '@tomaschochola/tooling-eslint
 const typescriptFiles = filePatterns.allTypeScriptFiles;
 const javascriptFiles = filePatterns.allJavaScriptFiles;
 
- 
 export default new ESLintConfigBuilder()
   .addNodeGlobalsForConfigFiles()
   .addBrowserGlobals()

@@ -12,7 +12,6 @@
 
 import { WebpackConfigBuilder } from '@tomaschochola/tooling-webpack';
 
- 
 export default function (env, argv) {
   let tooling = new WebpackConfigBuilder({
     env,

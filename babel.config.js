@@ -12,5 +12,4 @@
 
 import config from '@tomaschochola/tooling-babel/templates/typescript.js';
 
- 
 export default config;

@@ -124,7 +124,6 @@ prettier_fix: ./node_modules ./package.json ./package-lock.json ./prettier.confi
 stylelint_fix: ./node_modules ./package.json ./package-lock.json ./stylelint.config.js
 	npm exec --ignore-scripts -- stylelint --allow-empty-input --fix ./**/*.{sass,scss,css}
 
-
 .PHONY: eslint_check
 eslint_check: ./node_modules ./package.json ./package-lock.json ./eslint.config.js
 	npm exec --ignore-scripts -- eslint --concurrency=auto .

@@ -12,5 +12,4 @@
 
 import config from '@tomaschochola/tooling-postcss/templates/base.js';
 
- 
 export default config;
