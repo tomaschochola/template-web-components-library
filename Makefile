@@ -14,67 +14,22 @@ MAKEFLAGS += --no-builtin-variables
 .SUFFIXES:
 .NOTPARALLEL:
 
-# Default goal
-
-.DEFAULT_GOAL := help
-
 # Options
 
-export DEBIAN_FRONTEND := noninteractive
+export APP_ENV ?= production
+export NODE_ENV ?= production
+
+# Default goal
+
+.DEFAULT_GOAL := never
+
+.PHONY: never
+.SILENT: never
+never:
+	printf '%s\n' 'No default target. Run an explicit target' >&2
+	exit 1
 
 # Goals
-
-.PHONY: help
-.SILENT: help
-help:
-	printf '\033[1m%s\033[0m\n' "$${PWD##*/} targets"
-	printf '%s\n' '--------------------------------------------------------------------------------'
-	printf '\033[1m%-18s\033[0m  %s\n' 'help' 'Show this help.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'all' 'Build production artifacts and package dist.zip.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'fix' 'Run all automatic fixers.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'check' 'Run lint, static analysis, tests, and audits.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'lint' 'Run code style checks.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'static' 'Run static analysis.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'test' 'Run tests.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'audit' 'Run dependency/security audits.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'deps_install' 'Install dependencies from current lock files.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'deps_update' 'Refresh dependencies and generated lock files.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'clean' 'Remove generated build, dependency, and test artifacts.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'distclean' 'Run clean and remove generated lock files.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'eslint_fix' 'Fix JavaScript/TypeScript lint issues with ESLint.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'prettier_fix' 'Format files with Prettier.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'stylelint_fix' 'Fix stylesheet lint issues with Stylelint.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'eslint_check' 'Check JavaScript/TypeScript with ESLint.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'prettier_check' 'Check formatting with Prettier.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'stylelint_check' 'Check stylesheets with Stylelint.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'typescript_check' 'Run TypeScript type checking.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'playwright_test' 'Run Playwright tests.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'playwright_install' 'Install Playwright browsers and OS dependencies.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'npm_audit' 'Run npm audit at the configured severity level.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'npm_install' 'Install npm dependencies from package-lock.json.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'npm_update' 'Refresh npm dependencies and package-lock.json.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'precreate' 'Run pre-devcontainer setup hooks.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'postcreate' 'Run post-devcontainer setup hooks.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'start' 'Start the local development server.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'serve' 'Alias for start.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'server' 'Alias for start.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'dev' 'Alias for start.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'port' 'Print local service ports.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'ports' 'Alias for port.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'devcontainer' 'Open a devcontainer shell, then stop the container.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'build' 'Build project artifacts.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'dist_zip' 'Package the contents of ./dist into ./release/dist.zip.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'local' 'Build/run with APP_ENV=local.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'development' 'Build/run with APP_ENV=development.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'sit' 'Build/run with APP_ENV=sit.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'uat' 'Build/run with APP_ENV=uat.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'production' 'Build/run with APP_ENV=production.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'playwright_failed' 'Open the last failed Playwright test report.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'playwright_headed' 'Run Playwright tests in headed mode.'
-	printf '\033[1m%-18s\033[0m  %s\n' 'playwright_ui' 'Open Playwright UI mode.'
-
-.PHONY: all
-all: dist_zip
 
 .PHONY: fix
 fix: eslint_fix prettier_fix stylelint_fix
@@ -105,7 +60,6 @@ clean:
 	rm -rf ./node_modules
 	rm -rf ./dist
 	rm -rf ./release
-	rm -rf ./tmp
 	rm -rf ./test-results
 
 .PHONY: distclean
@@ -147,7 +101,7 @@ playwright_test: ./node_modules ./package.json ./package-lock.json ./playwright.
 
 .PHONY: playwright_install
 playwright_install: ./node_modules ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --ignore-scripts -- playwright install --with-deps
+	npm exec --ignore-scripts -- playwright install --with-deps chromium firefox webkit chrome msedge
 
 .PHONY: npm_audit
 npm_audit: ./node_modules ./package.json ./package-lock.json
@@ -168,64 +122,57 @@ precreate:
 	docker volume create tomaschochola-npm-cache
 
 .PHONY: postcreate
-postcreate: deps_install
+postcreate: deps_install playwright_install
 
 .PHONY: start serve server dev
+start serve server dev: override export APP_ENV := local
+start serve server dev: override export NODE_ENV := development
 start serve server dev: ./node_modules ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- webpack-cli serve --mode=$${NODE_ENV:-development} --config-node-env=$${NODE_ENV:-development} --env APP_ENV=$${APP_ENV:-local}
+	npm exec --ignore-scripts -- webpack-cli serve --mode=$${NODE_ENV} --config-node-env=$${NODE_ENV}
 
-.PHONY: port ports
-.SILENT: port ports
-port ports:
-	printf '\033[1m%-80s\033[0m\n' 'template-web-components-library ports'
-	printf '%-80s\n' '--------------------------------------------------------------------------------'
-	printf '\033[1m%-12s %-21s %-12s %-20s\033[0m\n' 'Kind' 'Host' 'Container' 'Service'
-	printf '%-12s %-21s %-12s %-20s\n' 'reserved' '-' '61200' '-'
-	printf '%-12s %-21s %-12s %-20s\n' 'webpack' '127.0.0.1:61201' '61201' 'devcontainer'
-	printf '%-80s\n' '--------------------------------------------------------------------------------'
-	printf '\n\033[1mLinks\033[0m\n'
-	printf '%s\n' 'Webpack smoke server: http://127.0.0.1:61201/'
+.PHONY: local_dist local_zip
+local_dist local_zip: override export APP_ENV := local
+local_dist local_zip: override export NODE_ENV := development
+
+.PHONY: development_dist development_zip
+development_dist development_zip: override export APP_ENV := development
+development_dist development_zip: override export NODE_ENV := development
+
+.PHONY: sit_dist sit_zip
+sit_dist sit_zip: override export APP_ENV := sit
+sit_dist sit_zip: override export NODE_ENV := production
+
+.PHONY: uat_dist uat_zip
+uat_dist uat_zip: override export APP_ENV := uat
+uat_dist uat_zip: override export NODE_ENV := production
+
+.PHONY: production_dist production_zip
+production_dist production_zip: override export APP_ENV := production
+production_dist production_zip: override export NODE_ENV := production
+
+local_dist development_dist sit_dist uat_dist production_dist:
+	${MAKE} build
+
+local_zip: local_dist
+development_zip: development_dist
+sit_zip: sit_dist
+uat_zip: uat_dist
+production_zip: production_dist
+
+local_zip development_zip sit_zip uat_zip production_zip:
+	mkdir -p ./release
+	rm -f "./release/$${APP_ENV}.zip"
+	cd "./dist/$${APP_ENV}" && zip -q -r "../../release/$${APP_ENV}.zip" .
 
 .PHONY: devcontainer
 devcontainer: precreate
-	devcontainer up
-	devcontainer exec /bin/bash || true
+	devcontainer up --workspace-folder .
+	devcontainer exec --workspace-folder . /bin/bash || true
 	docker ps -q --filter "label=devcontainer.local_folder=$${PWD}" | xargs -r docker stop
 
 .PHONY: build
 build: ./node_modules ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- webpack-cli build --mode=$${NODE_ENV:-development} --config-node-env=$${NODE_ENV:-development} --env APP_ENV=$${APP_ENV:-local}
-
-.PHONY: dist_zip
-dist_zip: production
-	rm -rf ./release
-	mkdir -p ./release
-	cd ./dist && zip -r ../release/dist.zip .
-
-.PHONY: local
-local: export APP_ENV := local
-local: export NODE_ENV := development
-local: build
-
-.PHONY: development
-development: export APP_ENV := development
-development: export NODE_ENV := production
-development: build
-
-.PHONY: sit
-sit: export APP_ENV := sit
-sit: export NODE_ENV := production
-sit: build
-
-.PHONY: uat
-uat: export APP_ENV := uat
-uat: export NODE_ENV := production
-uat: build
-
-.PHONY: production
-production: export APP_ENV := production
-production: export NODE_ENV := production
-production: build
+	npm exec --ignore-scripts -- webpack-cli build --mode=$${NODE_ENV} --config-node-env=$${NODE_ENV}
 
 .PHONY: playwright_failed
 playwright_failed: ./node_modules ./package.json ./package-lock.json ./playwright.config.js

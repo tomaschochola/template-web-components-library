@@ -58,6 +58,14 @@ declare module '*&as=png' {
   export default value;
 }
 
-declare module '*.scss';
+declare module '*.scss' {
+  const value: CSSStyleSheet;
 
-declare module '*.css';
+  export default value;
+}
+
+declare module '*.css' {
+  const value: CSSStyleSheet;
+
+  export default value;
+}
