@@ -20,6 +20,3 @@
 
 # playwright
 /test-results
-
-# temporary
-/package-lock.json
