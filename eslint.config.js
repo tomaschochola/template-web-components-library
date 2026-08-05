@@ -18,11 +18,27 @@ const javascriptFiles = filePatterns.allJavaScriptFiles;
 export default new ESLintConfigBuilder()
   .addNodeGlobalsForConfigFiles()
   .addBrowserGlobals()
-  .addGlobalIgnores(filePatterns.defaultIgnorePatterns)
-  .addGlobalIgnores(['node_modules', 'dist', 'release', 'tmp', 'test-results'])
+  .addGitIgnoreFile(import.meta.url)
   .addJavaScriptRecommendedRules()
+  .addJavaScriptPolicyRules()
   .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
+  .addTypeScriptStylisticTypeCheckedRules({ files: typescriptFiles })
   .enableTypeScriptProjectService({ files: typescriptFiles })
-  .enableTypeScriptProject({ files: filePatterns.playwrightTypeScriptFiles, project: './tsconfig.playwright.json' })
+  .enableTypeScriptProject({
+    files: filePatterns.playwrightTypeScriptFiles,
+    project: './tsconfig.playwright.json',
+  })
+  .addTypeScriptPolicyRules({ files: typescriptFiles })
+  .addRawConfig({
+    files: [...filePatterns.allConfigScriptFiles, '**/*.d.ts', '**/*.d.*.ts'],
+    rules: {
+      'no-restricted-exports': 'off',
+    },
+  })
   .disableTypeScriptTypeChecking({ files: javascriptFiles })
+  .addStylisticCustomizedRules()
+  .addStylisticPolicyRules()
+  .disableStylisticLegacyRules()
+  .addSonarJsRecommendedRules()
+  .addSonarJsPolicyOverrides()
   .toConfig();

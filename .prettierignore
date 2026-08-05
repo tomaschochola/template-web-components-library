@@ -1,36 +1,15 @@
-# generic
-.DS_Store
-.fleet
-.idea
-.vscode
-.zed
-.antigravitycli
-
 # node
-/node_modules
 /package-lock.json
-
-# environment files and secrets
-/.env
-/.secrets
-
-# generated artifacts
-/dist
-/release
-/tmp
-
-# playwright
-/test-results
 
 # svg
 *.svg
 
 # eslint
-*.tsx
-*.mts
-*.ts
+*.cjs
 *.cts
+*.js
 *.jsx
 *.mjs
-*.js
-*.cjs
+*.mts
+*.ts
+*.tsx

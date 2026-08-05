@@ -16,6 +16,5 @@ declare namespace NodeJS {
     readonly APP_NAME: string;
     readonly APP_VERSION: string;
     readonly NODE_ENV: 'development' | 'production';
-    readonly WEBPACK_MODE: 'development' | 'none' | 'production';
   }
 }

@@ -15,18 +15,18 @@
       "url": "https://github.com/tomaschochola"
     }
   ],
-  "description": "@tomaschochola/template-web-components-library",
+  "description": "Web Components library template with TypeScript, Webpack, and Playwright.",
   "devDependencies": {
-    "@playwright/test": "^1.62.0",
-    "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#1.x",
-    "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#1.x",
-    "@tomaschochola/tooling-playwright": "github:tomaschochola/tooling-playwright#1.x",
-    "@tomaschochola/tooling-postcss": "github:tomaschochola/tooling-postcss#1.x",
-    "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#1.x",
-    "@tomaschochola/tooling-stylelint": "github:tomaschochola/tooling-stylelint#1.x",
+    "@playwright/test": "1.62.1",
+    "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#2.x",
+    "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#2.x",
+    "@tomaschochola/tooling-playwright": "github:tomaschochola/tooling-playwright#2.x",
+    "@tomaschochola/tooling-postcss": "github:tomaschochola/tooling-postcss#2.x",
+    "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#2.x",
+    "@tomaschochola/tooling-stylelint": "github:tomaschochola/tooling-stylelint#2.x",
     "@tomaschochola/tooling-trimmer": "github:tomaschochola/tooling-trimmer#2.x",
-    "@tomaschochola/tooling-typescript": "github:tomaschochola/tooling-typescript#1.x",
-    "@tomaschochola/tooling-webpack": "github:tomaschochola/tooling-webpack#1.x"
+    "@tomaschochola/tooling-typescript": "github:tomaschochola/tooling-typescript#2.x",
+    "@tomaschochola/tooling-webpack": "github:tomaschochola/tooling-webpack#2.x"
   },
   "funding": {
     "type": "github",
@@ -42,8 +42,11 @@
   ],
   "license": "CC-BY-ND-4.0",
   "name": "@tomaschochola/template-web-components-library",
-  "repository": "github:tomaschochola/template-web-components-library",
-  "sideEffects": true,
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomaschochola/template-web-components-library.git"
+  },
   "type": "module",
   "version": "2.0.0"
 }

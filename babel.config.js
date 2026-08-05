@@ -10,6 +10,11 @@
  * @see {@link https://github.com/sponsors/tomaschochola} GitHub Sponsors
  */
 
-import config from '@tomaschochola/tooling-babel/templates/typescript.js';
+import { BabelConfigBuilder } from '@tomaschochola/tooling-babel';
 
-export default config;
+export default new BabelConfigBuilder({
+  mode: process.env.BABEL_ENV ?? process.env.NODE_ENV ?? 'production',
+})
+  .addPresetEnv()
+  .addPresetTypeScript()
+  .toConfig();

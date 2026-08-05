@@ -89,7 +89,7 @@ prettier_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.js
 
 .PHONY: stylelint_fix
 stylelint_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
-	npm exec --ignore-scripts -- stylelint --allow-empty-input --fix ./**/*.{sass,scss,css}
+	npm exec --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input --fix './**/*.{sass,scss,css}'
 
 .PHONY: eslint_check
 eslint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./eslint.config.js
@@ -101,7 +101,7 @@ prettier_check: ./node_modules/.package-lock.json ./package.json ./package-lock.
 
 .PHONY: stylelint_check
 stylelint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
-	npm exec --ignore-scripts -- stylelint --allow-empty-input ./**/*.{sass,scss,css}
+	npm exec --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input './**/*.{sass,scss,css}'
 
 .PHONY: typescript_check
 typescript_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tsconfig.json ./tsconfig.playwright.json
@@ -111,10 +111,6 @@ typescript_check: ./node_modules/.package-lock.json ./package.json ./package-loc
 .PHONY: playwright_test
 playwright_test: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
 	npm exec --ignore-scripts -- playwright test
-
-.PHONY: playwright_install
-playwright_install: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --ignore-scripts -- playwright install --with-deps chromium firefox webkit chrome msedge
 
 .PHONY: npm_audit
 npm_audit: ./node_modules/.package-lock.json ./package.json ./package-lock.json
@@ -129,7 +125,7 @@ npm_update: deps_clean ./package.json
 	npm update --ignore-scripts --install-links --include=prod --include=dev --include=peer --include=optional
 
 .PHONY: postcreate
-postcreate: deps_install playwright_install
+postcreate: deps_install
 
 .PHONY: start serve server dev
 start serve server dev: ./node_modules/.package-lock.json ./package.json ./package-lock.json
