@@ -46,9 +46,7 @@ export default function (env = {}, argv = {}) {
     .addImageMinimizer();
 
   if (tooling.isProductionMode) {
-    tooling = tooling
-      .addGzipCompressionPlugin()
-      .addBrotliCompressionPlugin();
+    tooling = tooling.addGzipCompressionPlugin().addBrotliCompressionPlugin();
   }
 
   return tooling.toConfig();
