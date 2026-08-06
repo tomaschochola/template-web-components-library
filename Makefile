@@ -31,7 +31,7 @@ DEVCONTAINER_FILTER := label=devcontainer.local_folder=$(CURDIR)
 # Goals
 
 .PHONY: fix
-fix: eslint_fix prettier_fix stylelint_fix trimmer_fix
+fix: eslint_fix stylelint_fix prettier_fix trimmer_fix
 
 .PHONY: check
 check: trimmer_check lint static test audit
@@ -67,9 +67,6 @@ deps_clean:
 
 .PHONY: distclean
 distclean: clean deps_clean
-
-.PHONY: nuke
-nuke: down distclean
 
 .PHONY: trimmer_fix
 trimmer_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json
@@ -134,7 +131,7 @@ start serve server dev: ./node_modules/.package-lock.json ./package.json ./packa
 .PHONY: zip
 zip: build
 	rm -f ./dist.zip
-	cd ./dist && zip -q -r ../dist.zip .
+	cd ./dist && zip -q -r ../dist.zip . -x '*.map' '*.map.br' '*.map.gz'
 
 .PHONY: devcontainer_check
 devcontainer_check:
@@ -149,33 +146,21 @@ up: devcontainer_check
 devcontainer: up
 	devcontainer exec --workspace-folder . /bin/bash
 
-.PHONY: status
-status:
-	docker container ls --all --filter "$(DEVCONTAINER_FILTER)"
-
 .PHONY: stop
 stop:
 	docker container ls --quiet --filter "$(DEVCONTAINER_FILTER)" | while IFS= read -r container; do docker container stop "$$container"; done
 
-.PHONY: restart
-restart:
-	docker container ls --all --quiet --filter "$(DEVCONTAINER_FILTER)" | while IFS= read -r container; do docker container restart "$$container"; done
-
 .PHONY: down
 down: stop
-	docker container ls --all --quiet --filter "$(DEVCONTAINER_FILTER)" | while IFS= read -r container; do docker container rm --volumes "$$container"; done
+	docker container ls --all --quiet --filter "$(DEVCONTAINER_FILTER)" | while IFS= read -r container; do docker container rm "$$container"; done
 
 .PHONY: rebuild
 rebuild: devcontainer_check down
-	devcontainer up --workspace-folder .
-
-.PHONY: rebuild_no_cache
-rebuild_no_cache: devcontainer_check down
 	devcontainer up --workspace-folder . --build-no-cache
 
 .PHONY: build
 build: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- webpack-cli build --mode=production --config-node-env=production --env APP_ENV=production
+	npm exec --ignore-scripts -- webpack-cli build --fail-on-warnings --mode=production --config-node-env=production --env APP_ENV=production
 
 .PHONY: playwright_failed
 playwright_failed: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
@@ -187,7 +172,7 @@ playwright_headed: ./node_modules/.package-lock.json ./package.json ./package-lo
 
 .PHONY: playwright_ui
 playwright_ui: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --ignore-scripts -- playwright test --ui --ui-host=0.0.0.0 --ui-port=61202
+	npm exec --ignore-scripts -- playwright test --ui --ui-host=0.0.0.0 --ui-port=61092
 
 ./node_modules/.package-lock.json: ./package.json ./package-lock.json
 	$(MAKE) npm_install

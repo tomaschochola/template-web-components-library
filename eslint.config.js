@@ -20,25 +20,12 @@ export default new ESLintConfigBuilder()
   .addBrowserGlobals()
   .addGitIgnoreFile(import.meta.url)
   .addJavaScriptRecommendedRules()
-  .addJavaScriptPolicyRules()
   .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
-  .addTypeScriptStylisticTypeCheckedRules({ files: typescriptFiles })
   .enableTypeScriptProjectService({ files: typescriptFiles })
   .enableTypeScriptProject({
     files: filePatterns.playwrightTypeScriptFiles,
     project: './tsconfig.playwright.json',
   })
-  .addTypeScriptPolicyRules({ files: typescriptFiles })
-  .addRawConfig({
-    files: [...filePatterns.allConfigScriptFiles, ...filePatterns.allTypeScriptDeclarationFiles],
-    rules: {
-      'no-restricted-exports': 'off',
-    },
-  })
   .disableTypeScriptTypeChecking({ files: javascriptFiles })
-  .addStylisticCustomizedRules()
-  .addStylisticPolicyRules()
-  .disableStylisticLegacyRules()
   .addSonarJsRecommendedRules()
-  .addSonarJsPolicyOverrides()
   .toConfig();

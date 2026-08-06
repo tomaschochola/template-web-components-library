@@ -26,7 +26,7 @@ export default function (env = {}, argv = {}) {
     .setEntries({
       index: ['./smoke/index.ts'],
     })
-    .setDevServerPort(61201)
+    .setDevServerPort(61090)
     .addBabelLoader()
     .addStyleLoaders()
     .addHtmlLoader()
@@ -49,10 +49,6 @@ export default function (env = {}, argv = {}) {
     tooling = tooling
       .addGzipCompressionPlugin()
       .addBrotliCompressionPlugin();
-  }
-
-  if (appEnv === 'playwright') {
-    tooling = tooling.disableDevServerLiveUpdates();
   }
 
   return tooling.toConfig();

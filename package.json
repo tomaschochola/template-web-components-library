@@ -18,15 +18,15 @@
   "description": "Web Components library template with TypeScript, Webpack, and Playwright.",
   "devDependencies": {
     "@playwright/test": "1.62.1",
-    "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#2.x",
-    "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#2.x",
-    "@tomaschochola/tooling-playwright": "github:tomaschochola/tooling-playwright#2.x",
-    "@tomaschochola/tooling-postcss": "github:tomaschochola/tooling-postcss#2.x",
-    "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#2.x",
-    "@tomaschochola/tooling-stylelint": "github:tomaschochola/tooling-stylelint#2.x",
-    "@tomaschochola/tooling-trimmer": "github:tomaschochola/tooling-trimmer#2.x",
-    "@tomaschochola/tooling-typescript": "github:tomaschochola/tooling-typescript#2.x",
-    "@tomaschochola/tooling-webpack": "github:tomaschochola/tooling-webpack#2.x"
+    "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#main",
+    "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#main",
+    "@tomaschochola/tooling-playwright": "github:tomaschochola/tooling-playwright#main",
+    "@tomaschochola/tooling-postcss": "github:tomaschochola/tooling-postcss#main",
+    "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#main",
+    "@tomaschochola/tooling-stylelint": "github:tomaschochola/tooling-stylelint#main",
+    "@tomaschochola/tooling-trimmer": "github:tomaschochola/tooling-trimmer#main",
+    "@tomaschochola/tooling-typescript": "github:tomaschochola/tooling-typescript#main",
+    "@tomaschochola/tooling-webpack": "github:tomaschochola/tooling-webpack#main"
   },
   "funding": {
     "type": "github",
