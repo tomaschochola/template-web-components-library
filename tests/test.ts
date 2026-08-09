@@ -11,13 +11,13 @@
  */
 
 import { expect, type Page } from '@playwright/test';
-import { waitForIdle } from '@tomaschochola/tooling-playwright';
+import { waitForPageResources } from '@tomaschochola/tooling-playwright';
 
-export { waitForIdle };
+export { waitForPageResources };
 
 export async function loadPage(page: Page, url: string): Promise<void> {
   await page.goto(url);
-  await waitForIdle(page);
+  await waitForPageResources(page);
   await expect(page).toHaveURL(url);
   await expect(page.locator('#webpack-dev-server-client-overlay')).not.toBeAttached();
 }
