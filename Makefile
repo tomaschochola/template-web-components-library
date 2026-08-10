@@ -28,19 +28,22 @@ never:
 
 DEVCONTAINER_FILTER := label=devcontainer.local_folder=$(CURDIR)
 
-# Goals
+# Public goals
 
 .PHONY: fix
 fix: eslint_fix stylelint_fix prettier_fix trimmer_fix
 
 .PHONY: check
-check: trimmer_check lint static test audit
+check: doctor lint analyze test build audit
+
+.PHONY: doctor
+doctor: git_check npm_config_check npm_doctor
 
 .PHONY: lint
-lint: eslint_check prettier_check stylelint_check
+lint: eslint_check stylelint_check prettier_check trimmer_check
 
-.PHONY: static
-static: typescript_check
+.PHONY: analyze
+analyze: npm_check tsc_check
 
 .PHONY: test
 test: playwright_test
@@ -48,11 +51,8 @@ test: playwright_test
 .PHONY: audit
 audit: npm_audit
 
-.PHONY: deps_install
-deps_install: npm_install
-
-.PHONY: deps_update
-deps_update: npm_update
+.PHONY: update
+update: npm_config_check ./package.json ./package-lock.json npm_update
 
 .PHONY: clean
 clean:
@@ -61,89 +61,29 @@ clean:
 	rm -rf ./test-results
 	rm -rf ./tmp
 
-.PHONY: deps_clean
-deps_clean:
-	rm -rf ./node_modules
-
 .PHONY: distclean
 distclean: clean deps_clean
 
-.PHONY: trimmer_fix
-trimmer_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- tooling-trimmer fix .
+.PHONY: build
+build: ./node_modules/.package-lock.json ./package.json ./package-lock.json
+	npm exec --no --ignore-scripts -- webpack-cli build --fail-on-warnings --mode=production --config-node-env=production --env APP_ENV=production
 
-.PHONY: trimmer_check
-trimmer_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- tooling-trimmer check .
-
-.PHONY: eslint_fix
-eslint_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./eslint.config.js
-	npm exec --ignore-scripts -- eslint --concurrency=auto --fix .
-
-.PHONY: prettier_fix
-prettier_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./prettier.config.js
-	npm exec --ignore-scripts -- prettier -w .
-
-.PHONY: stylelint_fix
-stylelint_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
-	npm exec --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input --fix './**/*.{sass,scss,css}'
-
-.PHONY: eslint_check
-eslint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./eslint.config.js
-	npm exec --ignore-scripts -- eslint --concurrency=auto .
-
-.PHONY: prettier_check
-prettier_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./prettier.config.js
-	npm exec --ignore-scripts -- prettier -c .
-
-.PHONY: stylelint_check
-stylelint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
-	npm exec --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input './**/*.{sass,scss,css}'
-
-.PHONY: typescript_check
-typescript_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tsconfig.json ./tsconfig.playwright.json
-	npm exec --ignore-scripts -- tsc --noEmit --project ./tsconfig.json
-	npm exec --ignore-scripts -- tsc --noEmit --project ./tsconfig.playwright.json
-
-.PHONY: playwright_test
-playwright_test: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --ignore-scripts -- playwright test
-
-.PHONY: npm_audit
-npm_audit: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm audit --ignore-scripts --audit-level=high --install-links --include=prod --include=dev --include=peer --include=optional
-
-.PHONY: npm_install
-npm_install: ./package.json ./package-lock.json
-	npm ci --ignore-scripts --install-links --include=prod --include=dev --include=peer --include=optional
-
-.PHONY: npm_update
-npm_update: deps_clean ./package.json
-	npm update --ignore-scripts --install-links --include=prod --include=dev --include=peer --include=optional
+.PHONY: archive
+archive: ./dist.zip
 
 .PHONY: postcreate
 postcreate: deps_install
 
 .PHONY: start serve server dev
 start serve server dev: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- webpack-cli serve --mode=development --config-node-env=development --env APP_ENV=local
-
-.PHONY: zip
-zip: build
-	rm -f ./dist.zip
-	cd ./dist && zip -q -r ../dist.zip . -x '*.map' '*.map.br' '*.map.gz'
-
-.PHONY: devcontainer_check
-devcontainer_check:
-	devcontainer read-configuration --workspace-folder . >/dev/null
-	docker build --check --file ./.devcontainer/Dockerfile --platform linux/amd64 ./.devcontainer
+	npm exec --no --ignore-scripts -- webpack-cli serve --mode=development --config-node-env=development --env APP_ENV=local
 
 .PHONY: up
 up: devcontainer_check
 	devcontainer up --workspace-folder .
 
-.PHONY: devcontainer
-devcontainer: up
+.PHONY: shell
+shell: up
 	devcontainer exec --workspace-folder . /bin/bash
 
 .PHONY: stop
@@ -158,21 +98,121 @@ down: stop
 rebuild: devcontainer_check down
 	devcontainer up --workspace-folder . --build-no-cache
 
-.PHONY: build
-build: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm exec --ignore-scripts -- webpack-cli build --fail-on-warnings --mode=production --config-node-env=production --env APP_ENV=production
+# Protected goals
 
-.PHONY: playwright_failed
-playwright_failed: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --ignore-scripts -- playwright test --last-failed
+.PHONY: deps_install
+deps_install: npm_install
 
-.PHONY: playwright_headed
-playwright_headed: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	xvfb-run --auto-servernum -- npm exec --ignore-scripts -- playwright test --headed
+.PHONY: deps_clean
+deps_clean: npm_clean
 
-.PHONY: playwright_ui
-playwright_ui: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --ignore-scripts -- playwright test --ui --ui-host=0.0.0.0 --ui-port=61092
+.PHONY: trimmer_fix
+trimmer_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json
+	npm exec --no --ignore-scripts -- tooling-trimmer fix .
 
-./node_modules/.package-lock.json: ./package.json ./package-lock.json
+.PHONY: trimmer_check
+trimmer_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json
+	npm exec --no --ignore-scripts -- tooling-trimmer check .
+
+.PHONY: eslint_fix
+eslint_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./eslint.config.js
+	npm exec --no --ignore-scripts -- eslint --concurrency=auto --fix .
+
+.PHONY: eslint_check
+eslint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./eslint.config.js
+	npm exec --no --ignore-scripts -- eslint --concurrency=auto .
+
+.PHONY: prettier_fix
+prettier_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./prettier.config.js
+	npm exec --no --ignore-scripts -- prettier -w .
+
+.PHONY: prettier_check
+prettier_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./prettier.config.js
+	npm exec --no --ignore-scripts -- prettier -c .
+
+.PHONY: stylelint_fix
+stylelint_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
+	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input --fix './**/*.{sass,scss,css}'
+
+.PHONY: stylelint_check
+stylelint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
+	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input './**/*.{sass,scss,css}'
+
+.PHONY: tsc_check
+tsc_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tsconfig.json ./tsconfig.playwright.json
+	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tsconfig.json
+	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tsconfig.playwright.json
+
+.PHONY: playwright_test
+playwright_test: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
+	npm exec --no --ignore-scripts -- playwright test
+
+.PHONY: playwright_retest
+playwright_retest: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
+	npm exec --no --ignore-scripts -- playwright test --last-failed
+
+.PHONY: playwright_test_headed
+playwright_test_headed: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
+	xvfb-run --auto-servernum -- npm exec --no --ignore-scripts -- playwright test --headed
+
+.PHONY: playwright_test_ui
+playwright_test_ui: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
+	npm exec --no --ignore-scripts -- playwright test --ui --ui-host=0.0.0.0 --ui-port=61092
+
+.PHONY: npm_config_check
+npm_config_check: ./.npmrc
+	test "$$(npm config get ignore-scripts)" = "true"
+	test "$$(npm config get allow-directory)" = "root"
+	test "$$(npm config get allow-file)" = "root"
+	test "$$(npm config get allow-git)" = "root"
+	test "$$(npm config get allow-remote)" = "root"
+	test "$$(npm config get audit)" = "false"
+	test "$$(npm config get strict-ssl)" = "true"
+	test "$$(npm config get registry)" = "https://registry.npmjs.org/"
+
+.PHONY: npm_doctor
+npm_doctor:
+	npm doctor connection registry environment permissions cache
+
+.PHONY: npm_check
+npm_check: npm_config_check ./node_modules/.package-lock.json
+	npm ci --dry-run --ignore-scripts --audit=false --install-links --include=prod --include=dev --include=peer --include=optional
+	npm ls --all --install-links --include=prod --include=dev --include=peer --include=optional >/dev/null
+
+.PHONY: npm_audit
+npm_audit: npm_config_check ./node_modules/.package-lock.json ./package.json ./package-lock.json
+	npm audit --ignore-scripts --audit-level=high --install-links --include=prod --include=dev --include=peer --include=optional
+
+.PHONY: npm_install
+npm_install: npm_config_check ./package.json ./package-lock.json
+	npm ci --ignore-scripts --install-links --include=prod --include=dev --include=peer --include=optional
+
+.PHONY: npm_update
+npm_update: npm_config_check ./package.json ./package-lock.json npm_clean
+	npm update --ignore-scripts --install-links --include=prod --include=dev --include=peer --include=optional
+
+.PHONY: npm_clean
+npm_clean:
+	rm -rf ./node_modules
+
+.PHONY: git_check
+git_check:
+	test -z "$$(git ls-files --unmerged)"
+	test -z "$$(git ls-files --cached --ignored --exclude-standard)"
+	git diff --check
+	git diff --cached --check
+	git fsck --full --strict --no-dangling --no-progress
+
+.PHONY: devcontainer_check
+devcontainer_check:
+	devcontainer read-configuration --workspace-folder . >/dev/null
+	docker build --check --file ./.devcontainer/Dockerfile --platform linux/amd64 ./.devcontainer
+
+# Private targets
+
+./dist.zip: build
+	rm -f ./dist.zip
+	cd ./dist && zip -q -r ../dist.zip . -x '*.map' '*.map.br' '*.map.gz'
+
+./node_modules/.package-lock.json: ./.npmrc ./package.json ./package-lock.json
 	$(MAKE) npm_install
