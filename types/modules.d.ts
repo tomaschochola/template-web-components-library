@@ -59,13 +59,39 @@ declare module '*&as=png' {
 }
 
 declare module '*.scss' {
+  export {};
+}
+
+declare module '*.css' {
+  export {};
+}
+
+declare module '*.scss?sheet' {
   const value: CSSStyleSheet;
 
   export default value;
 }
 
-declare module '*.css' {
+declare module '*.scss?text' {
+  const value: string;
+
+  export default value;
+}
+
+declare module '*.css?sheet' {
   const value: CSSStyleSheet;
+
+  export default value;
+}
+
+declare module '*.css?text' {
+  const value: string;
+
+  export default value;
+}
+
+declare module '*.html' {
+  const value: string;
 
   export default value;
 }

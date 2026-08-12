@@ -22,7 +22,10 @@ export default function (env = {}, argv = {}) {
   const appName = tooling.appName;
   const appVersion = tooling.appVersion;
 
+  const isProductionApp = tooling.isProductionMode && appEnv === 'production';
+
   tooling = tooling
+    .setDevtool(tooling.isProductionMode ? false : 'source-map')
     .setEntries({
       index: ['./smoke/index.ts'],
     })
@@ -45,7 +48,7 @@ export default function (env = {}, argv = {}) {
     .addJsonMinimizer()
     .addImageMinimizer();
 
-  if (tooling.isProductionMode) {
+  if (isProductionApp) {
     tooling = tooling.addGzipCompressionPlugin().addBrotliCompressionPlugin();
   }
 

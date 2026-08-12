@@ -10,11 +10,15 @@
  * @see {@link https://github.com/sponsors/tomaschochola} GitHub Sponsors
  */
 
-import { expect, test } from '@playwright/test';
-import { loadPage } from './test';
+import { test } from '@playwright/test';
+import { assertPage } from '@tomaschochola/tooling-playwright';
 
-test('/', async ({ page }) => {
-  await loadPage(page, '/');
-
-  await expect(page).toHaveTitle('tomaschochola/template-web-components-library');
+// Assertions are encapsulated by assertPage.
+// eslint-disable-next-line sonarjs/assertions-in-tests
+test('renders the smoke page', async ({ page }) => {
+  await assertPage(page, {
+    heading: 'tomaschochola/template-web-components-library',
+    title: 'tomaschochola/template-web-components-library',
+    url: '/',
+  });
 });
