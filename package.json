@@ -1,52 +1,52 @@
 {
-  "author": {
-    "email": "tomaschochola@tomaschochola.cz",
-    "name": "Tomáš Chochola",
-    "url": "https://github.com/tomaschochola"
-  },
-  "bugs": {
-    "email": "tomaschochola@tomaschochola.cz",
-    "url": "https://github.com/tomaschochola/template-web-components-library/issues"
-  },
-  "contributors": [
-    {
-      "email": "tomaschochola@tomaschochola.cz",
-      "name": "Tomáš Chochola",
-      "url": "https://github.com/tomaschochola"
-    }
-  ],
-  "description": "Web Components library template with TypeScript, Webpack, and Playwright.",
-  "devDependencies": {
-    "@playwright/test": "1.62.1",
-    "@tomaschochola/tooling-babel": "github:tomaschochola/tooling-babel#main",
-    "@tomaschochola/tooling-eslint": "github:tomaschochola/tooling-eslint#main",
-    "@tomaschochola/tooling-playwright": "github:tomaschochola/tooling-playwright#main",
-    "@tomaschochola/tooling-postcss": "github:tomaschochola/tooling-postcss#main",
-    "@tomaschochola/tooling-prettier": "github:tomaschochola/tooling-prettier#main",
-    "@tomaschochola/tooling-stylelint": "github:tomaschochola/tooling-stylelint#main",
-    "@tomaschochola/tooling-trimmer": "github:tomaschochola/tooling-trimmer#main",
-    "@tomaschochola/tooling-typescript": "github:tomaschochola/tooling-typescript#main",
-    "@tomaschochola/tooling-webpack": "github:tomaschochola/tooling-webpack#main"
-  },
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/tomaschochola"
-  },
-  "homepage": "https://github.com/tomaschochola/template-web-components-library",
-  "keywords": [
-    "tomaschochola",
-    "TomasChochola",
-    "Tomas Chochola",
-    "Tomáš Chochola",
-    "template-web-components-library"
-  ],
-  "license": "CC-BY-ND-4.0",
-  "name": "@tomaschochola/template-web-components-library",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tomaschochola/template-web-components-library.git"
-  },
-  "type": "module",
-  "version": "0.0.0"
+    "author": {
+        "email": "tomaschochola@tomaschochola.cz",
+        "name": "Tomáš Chochola",
+        "url": "https://github.com/tomaschochola"
+    },
+    "bugs": {
+        "email": "tomaschochola@tomaschochola.cz",
+        "url": "https://github.com/tomaschochola/template-web-components-library/issues"
+    },
+    "contributors": [
+        {
+            "email": "tomaschochola@tomaschochola.cz",
+            "name": "Tomáš Chochola",
+            "url": "https://github.com/tomaschochola"
+        }
+    ],
+    "description": "Web Components library template with TypeScript, Webpack, and Playwright.",
+    "devDependencies": {
+        "@playwright/test": "1.62.1",
+        "@tomaschochola/tooling-babel": "git+https://github.com/tomaschochola/tooling-babel.git#main",
+        "@tomaschochola/tooling-eslint": "git+https://github.com/tomaschochola/tooling-eslint.git#main",
+        "@tomaschochola/tooling-playwright": "git+https://github.com/tomaschochola/tooling-playwright.git#main",
+        "@tomaschochola/tooling-postcss": "git+https://github.com/tomaschochola/tooling-postcss.git#main",
+        "@tomaschochola/tooling-prettier": "git+https://github.com/tomaschochola/tooling-prettier.git#main",
+        "@tomaschochola/tooling-stylelint": "git+https://github.com/tomaschochola/tooling-stylelint.git#main",
+        "@tomaschochola/tooling-trimmer": "git+https://github.com/tomaschochola/tooling-trimmer.git#main",
+        "@tomaschochola/tooling-typescript": "git+https://github.com/tomaschochola/tooling-typescript.git#main",
+        "@tomaschochola/tooling-webpack": "git+https://github.com/tomaschochola/tooling-webpack.git#main"
+    },
+    "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/tomaschochola"
+    },
+    "homepage": "https://github.com/tomaschochola/template-web-components-library",
+    "keywords": [
+        "tomaschochola",
+        "TomasChochola",
+        "Tomas Chochola",
+        "Tomáš Chochola",
+        "template-web-components-library"
+    ],
+    "license": "CC-BY-ND-4.0",
+    "name": "@tomaschochola/template-web-components-library",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tomaschochola/template-web-components-library.git"
+    },
+    "type": "module",
+    "version": "0.0.0"
 }

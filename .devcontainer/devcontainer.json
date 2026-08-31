@@ -1,24 +1,24 @@
 {
-  "appPort": ["61090:61090", "127.0.0.1:61091-61092:61091-61092", "61093:61093", "127.0.0.1:61094-61099:61094-61099"],
-  "build": {
-    "dockerfile": "Dockerfile",
-    "options": ["--platform=linux/amd64"]
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": ["EditorConfig.EditorConfig"],
-      "settings": {
-        "files.insertFinalNewline": true,
-        "files.trimFinalNewlines": true,
-        "files.trimTrailingWhitespace": true
-      }
-    }
-  },
-  "init": true,
-  "postCreateCommand": ["make", "postcreate"],
-  "remoteUser": "ubuntu",
-  "runArgs": ["--ipc=host", "--platform=linux/amd64"],
-  "updateRemoteUserUID": true,
-  "waitFor": "postCreateCommand",
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
+    "appPort": ["61090:61090", "127.0.0.1:61091-61092:61091-61092", "61093:61093", "127.0.0.1:61094-61099:61094-61099"],
+    "build": {
+        "dockerfile": "Dockerfile",
+        "options": ["--platform=linux/amd64"]
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": ["EditorConfig.EditorConfig"],
+            "settings": {
+                "files.insertFinalNewline": true,
+                "files.trimFinalNewlines": true,
+                "files.trimTrailingWhitespace": true
+            }
+        }
+    },
+    "init": true,
+    "postCreateCommand": ["make", "postcreate"],
+    "remoteUser": "ubuntu",
+    "runArgs": ["--ipc=host", "--platform=linux/amd64"],
+    "updateRemoteUserUID": true,
+    "waitFor": "postCreateCommand",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
 }

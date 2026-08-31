@@ -16,16 +16,16 @@ const typescriptFiles = filePatterns.allTypeScriptFiles;
 const javascriptFiles = filePatterns.allJavaScriptFiles;
 
 export default new ESLintConfigBuilder()
-  .addNodeGlobalsForConfigFiles()
-  .addBrowserGlobals()
-  .addGitIgnoreFile(import.meta.url)
-  .addJavaScriptRecommendedRules()
-  .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
-  .enableTypeScriptProjectService({ files: typescriptFiles })
-  .enableTypeScriptProject({
-    files: filePatterns.playwrightTypeScriptFiles,
-    project: './tsconfig.playwright.json',
-  })
-  .disableTypeScriptTypeChecking({ files: javascriptFiles })
-  .addSonarJsRecommendedRules()
-  .toConfig();
+    .addNodeGlobalsForConfigFiles()
+    .addBrowserGlobals()
+    .addGitIgnoreFile(import.meta.url)
+    .addJavaScriptRecommendedRules()
+    .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
+    .enableTypeScriptProjectService({ files: typescriptFiles })
+    .enableTypeScriptProject({
+        files: filePatterns.playwrightTypeScriptFiles,
+        project: './tsconfig.playwright.json',
+    })
+    .disableTypeScriptTypeChecking({ files: javascriptFiles })
+    .addSonarJsRecommendedRules()
+    .toConfig();

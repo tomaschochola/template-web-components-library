@@ -16,9 +16,9 @@ import { assertPage } from '@tomaschochola/tooling-playwright';
 // Assertions are encapsulated by assertPage.
 // eslint-disable-next-line sonarjs/assertions-in-tests
 test('renders the smoke page', async ({ page }) => {
-  await assertPage(page, {
-    heading: 'tomaschochola/template-web-components-library',
-    title: 'tomaschochola/template-web-components-library',
-    url: '/',
-  });
+    await assertPage(page, {
+        heading: 'tomaschochola/template-web-components-library',
+        title: 'tomaschochola/template-web-components-library',
+        url: '/',
+    });
 });

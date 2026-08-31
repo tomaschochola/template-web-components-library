@@ -15,12 +15,13 @@ import { createPlaywrightConfig } from '@tomaschochola/tooling-playwright';
 const baseURL = 'http://localhost:61090';
 
 export default createPlaywrightConfig({
-  tsconfig: './tsconfig.playwright.json',
-  webServer: {
-    command: 'npm exec --ignore-scripts -- webpack-cli serve --no-client --no-hot --no-live-reload --no-web-socket-server --mode=development --config-node-env=development --env APP_ENV=playwright',
-    url: baseURL,
-  },
-  use: {
-    baseURL,
-  },
+    tsconfig: './tsconfig.playwright.json',
+    webServer: {
+        command:
+            'npm exec --ignore-scripts -- webpack-cli serve --no-client --no-hot --no-live-reload --no-web-socket-server --mode=development --config-node-env=development --env APP_ENV=playwright',
+        url: baseURL,
+    },
+    use: {
+        baseURL,
+    },
 });
