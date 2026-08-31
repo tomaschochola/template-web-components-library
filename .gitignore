@@ -14,8 +14,8 @@
 /.secrets
 
 # generated artifacts
+/build
 /dist
-/dist.zip
 /tmp
 
 # playwright

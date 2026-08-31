@@ -26,6 +26,8 @@ never:
 
 # Options
 
+APP_ENV ?= production
+APP_INDEXABLE ?= false
 DEVCONTAINER_FILTER := label=devcontainer.local_folder=$(CURDIR)
 
 # Public goals
@@ -56,8 +58,8 @@ update: npm_config_check ./package.json ./package-lock.json npm_update
 
 .PHONY: clean
 clean:
+	rm -rf ./build
 	rm -rf ./dist
-	rm -f ./dist.zip
 	rm -rf ./test-results
 	rm -rf ./tmp
 
@@ -66,10 +68,10 @@ distclean: clean deps_clean
 
 .PHONY: build
 build: ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm exec --no --ignore-scripts -- webpack-cli build --fail-on-warnings --mode=production --config-node-env=production --env APP_ENV=production
+	npm exec --no --ignore-scripts -- webpack-cli build --fail-on-warnings --mode=production --config-node-env=production --env APP_ENV="$(APP_ENV)" --env APP_INDEXABLE="$(APP_INDEXABLE)"
 
 .PHONY: archive
-archive: ./dist.zip
+archive: build
 
 .PHONY: postcreate
 postcreate: deps_install
@@ -209,10 +211,6 @@ devcontainer_check:
 	docker build --check --file ./.devcontainer/Dockerfile --platform linux/amd64 ./.devcontainer
 
 # Private targets
-
-./dist.zip: build
-	rm -f ./dist.zip
-	cd ./dist && zip -q -r ../dist.zip . -x '*.map' '*.map.br' '*.map.gz'
 
 ./node_modules/.package-lock.json: ./.npmrc ./package.json ./package-lock.json
 	$(MAKE) npm_install

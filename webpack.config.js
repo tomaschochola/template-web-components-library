@@ -14,6 +14,7 @@ import { WebpackConfigBuilder } from '@tomaschochola/tooling-webpack';
 
 export default function (env = {}, argv = {}) {
   let tooling = new WebpackConfigBuilder({
+    ecmaVersion: 2025,
     env,
     argv,
   });
@@ -22,18 +23,15 @@ export default function (env = {}, argv = {}) {
   const appName = tooling.appName;
   const appVersion = tooling.appVersion;
 
-  const isProductionApp = tooling.isProductionMode && appEnv === 'production';
+  const isProductionBuild = tooling.isProductionBuild;
 
   tooling = tooling
-    .setDevtool(tooling.isProductionMode ? false : 'source-map')
+    .optimizeChunks()
     .setEntries({
       index: ['./smoke/index.ts'],
     })
     .setDevServerPort(61090)
-    .addBabelLoader()
-    .addStyleLoaders()
-    .addHtmlLoader()
-    .addAssetQueryRules()
+    .addBrowserLoaders()
     .addDefinePlugin({
       'process.env.APP_ENV': JSON.stringify(appEnv),
       'process.env.APP_NAME': JSON.stringify(appName),
@@ -42,14 +40,11 @@ export default function (env = {}, argv = {}) {
     .addHtmlPlugin({
       template: './smoke/index.html',
     })
-    .addTerserMinimizer()
-    .addCssMinimizer()
-    .addHtmlMinimizer()
-    .addJsonMinimizer()
-    .addImageMinimizer();
+    .addRobotsPlugin()
+    .optimizeAssets();
 
-  if (isProductionApp) {
-    tooling = tooling.addGzipCompressionPlugin().addBrotliCompressionPlugin();
+  if (isProductionBuild) {
+    tooling = tooling.precompressAssets().addArchivePlugin();
   }
 
   return tooling.toConfig();
