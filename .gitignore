@@ -16,7 +16,6 @@
 # generated artifacts
 /build
 /dist
-/tmp
 
 # playwright
 /test-results

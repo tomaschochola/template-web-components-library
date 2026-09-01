@@ -36,7 +36,7 @@ DEVCONTAINER_FILTER := label=devcontainer.local_folder=$(CURDIR)
 fix: eslint_fix stylelint_fix prettier_fix trimmer_fix
 
 .PHONY: check
-check: doctor lint analyze test build audit
+check: doctor lint analyze test dist audit
 
 .PHONY: doctor
 doctor: git_check npm_config_check npm_doctor
@@ -58,20 +58,17 @@ update: npm_config_check ./package.json ./package-lock.json npm_update
 
 .PHONY: clean
 clean:
-	rm -rf ./build
-	rm -rf ./dist
-	rm -rf ./test-results
-	rm -rf ./tmp
+	rm --force --recursive --one-file-system -- ./build ./dist ./test-results
 
 .PHONY: distclean
 distclean: clean deps_clean
 
-.PHONY: build
-build: ./node_modules/.package-lock.json ./package.json ./package-lock.json
+.PHONY: all
+all: ./node_modules/.package-lock.json ./package.json ./package-lock.json
 	npm exec --no --ignore-scripts -- webpack-cli build --fail-on-warnings --mode=production --config-node-env=production --env APP_ENV="$(APP_ENV)" --env APP_INDEXABLE="$(APP_INDEXABLE)"
 
-.PHONY: archive
-archive: build
+.PHONY: dist
+dist: all
 
 .PHONY: postcreate
 postcreate: deps_install
@@ -183,7 +180,7 @@ npm_check: npm_config_check ./node_modules/.package-lock.json
 
 .PHONY: npm_audit
 npm_audit: npm_config_check ./node_modules/.package-lock.json ./package.json ./package-lock.json
-	npm audit --ignore-scripts --audit-level=high --install-links --include=prod --include=dev --include=peer --include=optional
+	npm audit --ignore-scripts --audit-level=moderate --install-links --include=prod --include=dev --include=peer --include=optional
 
 .PHONY: npm_install
 npm_install: npm_config_check ./package.json ./package-lock.json
@@ -195,7 +192,7 @@ npm_update: npm_config_check ./package.json ./package-lock.json npm_clean
 
 .PHONY: npm_clean
 npm_clean:
-	rm -rf ./node_modules
+	rm --force --recursive --one-file-system -- ./node_modules
 
 .PHONY: git_check
 git_check:
