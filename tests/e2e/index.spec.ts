@@ -11,12 +11,11 @@
  */
 
 import { test } from '@playwright/test';
-import { assertPage } from '@tomaschochola/tooling-playwright';
+import { assertStandardPage } from '@tomaschochola/tooling-playwright';
 
-// Assertions are encapsulated by assertPage.
-// eslint-disable-next-line sonarjs/assertions-in-tests
+// Assertions are encapsulated by assertStandardPage.
 test('renders the smoke page', async ({ page }) => {
-    await assertPage(page, {
+    await assertStandardPage(page, {
         heading: 'tomaschochola/template-web-components-library',
         title: 'tomaschochola/template-web-components-library',
         url: '/',

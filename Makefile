@@ -138,25 +138,25 @@ stylelint_check: ./node_modules/.package-lock.json ./package.json ./package-lock
 	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input './**/*.{sass,scss,css}'
 
 .PHONY: tsc_check
-tsc_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tsconfig.json ./tsconfig.playwright.json
+tsc_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tsconfig.json ./tests/e2e/tsconfig.json
 	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tsconfig.json
-	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tsconfig.playwright.json
+	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tests/e2e/tsconfig.json
 
 .PHONY: playwright_test
-playwright_test: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --no --ignore-scripts -- playwright test
+playwright_test: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tests/e2e/playwright.config.ts
+	npm exec --no --ignore-scripts -- playwright test --config ./tests/e2e/playwright.config.ts
 
 .PHONY: playwright_retest
-playwright_retest: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --no --ignore-scripts -- playwright test --last-failed
+playwright_retest: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tests/e2e/playwright.config.ts
+	npm exec --no --ignore-scripts -- playwright test --config ./tests/e2e/playwright.config.ts --last-failed
 
 .PHONY: playwright_test_headed
-playwright_test_headed: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	xvfb-run --auto-servernum -- npm exec --no --ignore-scripts -- playwright test --headed
+playwright_test_headed: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tests/e2e/playwright.config.ts
+	xvfb-run --auto-servernum -- npm exec --no --ignore-scripts -- playwright test --config ./tests/e2e/playwright.config.ts --headed
 
 .PHONY: playwright_test_ui
-playwright_test_ui: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./playwright.config.js
-	npm exec --no --ignore-scripts -- playwright test --ui --ui-host=0.0.0.0 --ui-port=61092
+playwright_test_ui: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tests/e2e/playwright.config.ts
+	npm exec --no --ignore-scripts -- playwright test --config ./tests/e2e/playwright.config.ts --ui --ui-host=0.0.0.0 --ui-port=61092
 
 .PHONY: npm_config_check
 npm_config_check: ./.npmrc

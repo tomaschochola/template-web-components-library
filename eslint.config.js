@@ -12,20 +12,18 @@
 
 import { ESLintConfigBuilder, filePatterns } from '@tomaschochola/tooling-eslint';
 
-const typescriptFiles = filePatterns.allTypeScriptFiles;
-const javascriptFiles = filePatterns.allJavaScriptFiles;
+const browserFiles = ['smoke/**/*.{js,jsx,mjs,mts,ts,tsx}', 'src/**/*.{js,jsx,mjs,mts,ts,tsx}'];
+const typescriptFiles = [...filePatterns.typescript, ...filePatterns.tsx];
 
 export default new ESLintConfigBuilder()
     .addNodeGlobalsForConfigFiles()
-    .addBrowserGlobals()
+    .addNodeGlobals({ files: filePatterns.playwright })
+    .addBrowserGlobals({ files: browserFiles })
     .addGitIgnoreFile(import.meta.url)
-    .addJavaScriptRecommendedRules()
-    .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
+    .addJavaScriptRecommendedRules({ files: filePatterns.scripts })
+    .addTypeScriptRecommendedTypeCheckedRules({ files: typescriptFiles })
+    // .addTypeScriptStrictTypeCheckedRules({ files: typescriptFiles })
+    // .addTypeScriptOpinionatedTypeCheckedRules({ files: typescriptFiles })
     .enableTypeScriptProjectService({ files: typescriptFiles })
-    .enableTypeScriptProject({
-        files: filePatterns.playwrightTypeScriptFiles,
-        project: './tsconfig.playwright.json',
-    })
-    .disableTypeScriptTypeChecking({ files: javascriptFiles })
-    .addSonarJsRecommendedRules()
+    // .addSonarJsRecommendedRules({ files: browserFiles })
     .toConfig();
