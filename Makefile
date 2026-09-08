@@ -131,11 +131,11 @@ prettier_check: ./node_modules/.package-lock.json ./package.json ./package-lock.
 
 .PHONY: stylelint_fix
 stylelint_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
-	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input --fix './**/*.{sass,scss,css}'
+	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input --max-warnings=0 --fix './**/*.{scss,css}'
 
 .PHONY: stylelint_check
 stylelint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
-	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input './**/*.{sass,scss,css}'
+	npm exec --no --ignore-scripts -- stylelint --ignore-path ./.gitignore --allow-empty-input --max-warnings=0 './**/*.{scss,css}'
 
 .PHONY: tsc_check
 tsc_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tsconfig.json ./tests/e2e/tsconfig.json
