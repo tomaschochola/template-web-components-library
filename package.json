@@ -17,7 +17,7 @@
     ],
     "description": "Web Components library template with TypeScript, Webpack, and Playwright.",
     "devDependencies": {
-        "@playwright/test": "1.62.1",
+        "@playwright/test": "1.63.0",
         "@tomaschochola/tooling-babel": "git+https://github.com/tomaschochola/tooling-babel.git#main",
         "@tomaschochola/tooling-eslint": "git+https://github.com/tomaschochola/tooling-eslint.git#main",
         "@tomaschochola/tooling-playwright": "git+https://github.com/tomaschochola/tooling-playwright.git#main",
