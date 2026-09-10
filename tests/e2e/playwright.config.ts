@@ -13,7 +13,6 @@
 import {
     createPlaywrightConfig,
     createPlaywrightDesktopProjects,
-    // createPlaywrightBrandedDesktopProjects,
     // createPlaywrightPhoneProjects,
     // createPlaywrightTabletProjects,
 } from '@tomaschochola/tooling-playwright';
@@ -23,7 +22,6 @@ const baseURL = 'http://127.0.0.1:61090';
 export default createPlaywrightConfig({
     projects: [
         ...createPlaywrightDesktopProjects(),
-        // ...createPlaywrightBrandedDesktopProjects(), // Requires Chrome and Edge installation.
         // ...createPlaywrightPhoneProjects(),
         // ...createPlaywrightTabletProjects(),
     ],
