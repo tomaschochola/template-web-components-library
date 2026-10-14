@@ -28,7 +28,11 @@ never:
 
 APP_ENV ?= production
 APP_INDEXABLE ?= false
-DEVCONTAINER_FILTER := label=devcontainer.local_folder=$(CURDIR)
+DEVCONTAINER_COMPOSE := ./.devcontainer/docker-compose.yml
+
+LC_ALL ?= C.UTF-8
+
+export LC_ALL
 
 # Public goals
 
@@ -39,7 +43,7 @@ fix: eslint_fix stylelint_fix prettier_fix trimmer_fix
 check: doctor lint analyze test dist audit
 
 .PHONY: doctor
-doctor: git_check npm_config_check npm_doctor
+doctor: git_check npm_config_check npm_doctor npm_check
 
 .PHONY: lint
 lint: eslint_check stylelint_check prettier_check trimmer_check
@@ -87,11 +91,11 @@ shell: up
 
 .PHONY: stop
 stop:
-	docker container ls --quiet --filter "$(DEVCONTAINER_FILTER)" | while IFS= read -r container; do docker container stop "$$container"; done
+	docker compose -f "$(DEVCONTAINER_COMPOSE)" stop
 
 .PHONY: down
-down: stop
-	docker container ls --all --quiet --filter "$(DEVCONTAINER_FILTER)" | while IFS= read -r container; do docker container rm "$$container"; done
+down:
+	docker compose -f "$(DEVCONTAINER_COMPOSE)" down --remove-orphans
 
 .PHONY: rebuild
 rebuild: devcontainer_check down
@@ -205,6 +209,7 @@ git_check:
 .PHONY: devcontainer_check
 devcontainer_check:
 	devcontainer read-configuration --workspace-folder . >/dev/null
+	docker compose -f "$(DEVCONTAINER_COMPOSE)" config --quiet
 	docker build --check --file ./.devcontainer/Dockerfile --platform linux/amd64 ./.devcontainer
 
 # Private targets
