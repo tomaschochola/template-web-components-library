@@ -15,7 +15,7 @@
             "url": "https://github.com/tomaschochola"
         }
     ],
-    "description": "Web Components library template with TypeScript, Webpack, and Playwright.",
+    "description": "github.com/tomaschochola/template-web-components-library",
     "devDependencies": {
         "@playwright/test": "1.63.0",
         "@tomaschochola/tooling-babel": "git+https://github.com/tomaschochola/tooling-babel.git#main",
