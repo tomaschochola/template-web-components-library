@@ -18,7 +18,7 @@ export default function (env = {}, argv = {}) {
         .setEntries({
             index: ['./smoke/index.ts'],
         })
-        .setDevServerPort(61090)
+        .setDevServerPort(8080)
         .addBrowserLoaders()
         .addDefinePlugin({
             'process.env.APP_ENV': JSON.stringify(appEnv),

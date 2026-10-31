@@ -29,11 +29,17 @@ services:
             - 'devcontainer'
             - 'wiremock'
         ports:
-            - '61090:61090'
-            - '127.0.0.1:61091-61092:61091-61092'
-            - '61093:61093'
-            - '127.0.0.1:61094-61099:61094-61099'
-        restart: 'always'
+            - app_protocol: 'http'
+              host_ip: '127.0.0.1'
+              name: 'app'
+              protocol: 'tcp'
+              target: 8080
+            - app_protocol: 'http'
+              host_ip: '127.0.0.1'
+              name: 'playwright-ui'
+              protocol: 'tcp'
+              target: 8081
+        restart: 'unless-stopped'
         volumes:
             - bind:
                   create_host_path: false
@@ -49,13 +55,20 @@ services:
             start_period: '30s'
             test: ['CMD', 'curl', '--fail', '--silent', '--show-error', 'http://127.0.0.1:8080/__admin/health']
             timeout: '5s'
-        image: 'docker.io/wiremock/wiremock@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3'
+        image: 'docker.io/wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3'
         logging:
             driver: 'json-file'
             options:
                 max-file: '3'
                 max-size: '10m'
         networks: ['wiremock']
-        restart: 'always'
+        restart: 'unless-stopped'
         shm_size: '128mb'
         stop_grace_period: '30s'
+        volumes:
+            - bind:
+                  create_host_path: false
+              read_only: true
+              source: './wiremock/mappings'
+              target: '/home/wiremock/mappings'
+              type: 'bind'
