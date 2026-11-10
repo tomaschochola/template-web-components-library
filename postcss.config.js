@@ -1,3 +1,1 @@
-import { PostCSSConfigBuilder } from '@tomaschochola/tooling-postcss';
-
-export default new PostCSSConfigBuilder().addPresetEnvPlugin().toConfig();
+export { default } from '@tomaschochola/tooling-postcss';
