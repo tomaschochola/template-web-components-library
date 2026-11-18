@@ -23,13 +23,11 @@ never:
 	exit 1
 
 # Variables
-COMPOSE_PROJECT_NAME := $(shell printf 'dc-%s-%s' "$$(basename -- "$$(pwd -P)" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C tr -cs 'a-z0-9' '-' | sed -e 's/^-*//' -e 's/-*$$//' -e 's/^$$/workspace/' | cut -c 1-32 | sed 's/-*$$//')" "$$(printf '%s' "$$(pwd -P)" | sha256sum | cut -c 1-16)")
 LC_ALL := C.UTF-8
 
 APP_ENV ?= production
 APP_INDEXABLE ?= false
 
-export COMPOSE_PROJECT_NAME
 export LC_ALL
 
 # Phony
@@ -81,12 +79,6 @@ deps_install: npm_install
 dev serve server start: ./node_modules/.package-lock.json ./package.json ./package-lock.json
 	npm exec --no --ignore-scripts -- webpack-cli serve --client-web-socket-url auto://0.0.0.0:0/ws --mode=development --config-node-env=development --env APP_ENV=local
 
-.PHONY: devcontainer_check
-devcontainer_check:
-	devcontainer read-configuration --workspace-folder . >/dev/null
-	docker compose -f "./.devcontainer/docker-compose.yml" config --quiet
-	docker build --check --file ./.devcontainer/Dockerfile --platform linux/amd64 ./.devcontainer
-
 .PHONY: dirclean
 dirclean:
 	fd --hidden --exclude .git --type directory --print0 | sort --zero-terminated --reverse | xargs --null --no-run-if-empty rmdir --ignore-fail-on-non-empty --
@@ -99,10 +91,6 @@ distclean: clean deps_clean
 
 .PHONY: doctor
 doctor: command_check git_check npm_config_check npm_doctor npm_check
-
-.PHONY: down
-down:
-	docker compose -f "./.devcontainer/docker-compose.yml" down --remove-orphans
 
 .PHONY: eslint_check
 eslint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./eslint.config.js
@@ -122,11 +110,6 @@ git_check:
 	git diff --check
 	git diff --cached --check
 	git fsck --full --strict --no-dangling --no-progress
-
-.PHONY: interactive_gate
-.SILENT: interactive_gate
-interactive_gate:
-	if test ! -t 0 || test ! -t 1; then printf '%s\n' 'interactive_gate: interactive only' >&2; exit 1; fi
 
 .PHONY: lint
 lint: eslint_check stylelint_check prettier_check shellcheck trimmer_check
@@ -168,7 +151,7 @@ npm_update: npm_config_check ./package.json ./package-lock.json npm_clean
 	npm update --ignore-scripts --install-links --include=prod --include=dev --include=peer --include=optional
 
 .PHONY: nuke
-nuke: distclean prune xfd dirclean
+nuke: distclean xfd dirclean
 
 .PHONY: playwright_retest
 playwright_retest: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tests/e2e/playwright.config.ts
@@ -186,13 +169,6 @@ playwright_test_headed: ./node_modules/.package-lock.json ./package.json ./packa
 playwright_test_ui: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./tests/e2e/playwright.config.ts
 	npm exec --no --ignore-scripts -- playwright test --config ./tests/e2e/playwright.config.ts --ui --ui-host=0.0.0.0 --ui-port=8081
 
-.PHONY: port ports url urls
-.SILENT: port ports url urls
-port ports url urls:
-	printf 'Project: %s\n' "$$COMPOSE_PROJECT_NAME"
-	printf '%-20s %-12s %s\n' 'SERVICE' 'PORT' 'URL'
-	docker compose -f "./.devcontainer/docker-compose.yml" ps --format '{{$$service := .Service}}{{range .Publishers}}{{if .PublishedPort}}{{printf "%-20s %-12s http://%s:%d" $$service (printf "%d/%s" .TargetPort .Protocol) .URL .PublishedPort}}{{println}}{{end}}{{end}}' | sed '/^$$/d' | sort
-
 .PHONY: postcreate
 postcreate: deps_install
 
@@ -204,26 +180,10 @@ prettier_check: ./node_modules/.package-lock.json ./package.json ./package-lock.
 prettier_fix: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./prettier.config.js
 	npm exec --no --ignore-scripts -- prettier -w .
 
-.PHONY: prune
-prune:
-	docker compose -f "./.devcontainer/docker-compose.yml" down --volumes --rmi local --remove-orphans
-
-.PHONY: rebuild
-rebuild: devcontainer_check down | $(CURDIR)/.tmp
-	TMPDIR="$(CURDIR)/.tmp" devcontainer up --workspace-folder . --build-no-cache
-
-.PHONY: shell
-shell: interactive_gate up
-	devcontainer exec --workspace-folder . /bin/bash
-
 .PHONY: shellcheck
 shellcheck:
 	fd --case-sensitive --hidden --exclude .git --type file --glob '*.sh' --exec-batch env -u SHELLCHECK_OPTS shellcheck --shell=sh --norc --severity=style --enable=all --external-sources --check-sourced --source-path=SCRIPTDIR --
 	fd --case-sensitive --hidden --exclude .git --type file --glob '*.bash' --exec-batch env -u SHELLCHECK_OPTS shellcheck --shell=bash --norc --severity=style --enable=all --external-sources --check-sourced --source-path=SCRIPTDIR --
-
-.PHONY: stop
-stop:
-	docker compose -f "./.devcontainer/docker-compose.yml" stop
 
 .PHONY: stylelint_check
 stylelint_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json ./stylelint.config.js
@@ -249,10 +209,6 @@ tsc_check: ./node_modules/.package-lock.json ./package.json ./package-lock.json 
 	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tsconfig.json
 	npm exec --no --ignore-scripts -- tsc --noEmit --project ./tests/e2e/tsconfig.json
 
-.PHONY: up
-up: devcontainer_check | $(CURDIR)/.tmp
-	TMPDIR="$(CURDIR)/.tmp" devcontainer up --workspace-folder .
-
 .PHONY: update
 update: npm_config_check npm_update
 
@@ -261,8 +217,5 @@ xfd:
 	git clean -Xfd
 
 # Non-phony
-$(CURDIR)/.tmp:
-	mkdir --parents -- "$@"
-
 ./node_modules/.package-lock.json: ./.npmrc ./package.json ./package-lock.json
 	$(MAKE) npm_install
